@@ -39,9 +39,19 @@ async def get_by_id(id: int, db: Session = Depends(get_db)):
 async def getTracks(request: RequestTrack, db: Session = Depends(get_db)):
     trackIn = crud.getTrack(db, track=request.nameIn, artist=request.artistIn)
     trackOut = crud.getTrack(db, track=request.nameOut, artist=request.artistOut)
-    return Response(status="Ok",
-                    code="200",
-                    message="Tracks Found Successfully",
+    
+    status = "OK"
+    code = "200"
+    msg = "Tracks Found Successfully"
+
+    if (trackIn == None) or (trackOut == None):
+        status = "ERROR"
+        code = "404"
+        msg = "At Least One Track Not Found"
+
+    return Response(status=status,
+                    code=code,
+                    message=msg,
                     result={"trackIn": trackIn, "trackOut": trackOut}).dict(exclude_none=True)
 
 
