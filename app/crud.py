@@ -1,36 +1,20 @@
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
-from models import Book
-from schemas import BookSchema
+from models import Track
+from schemas import TrackSchema
 
 
-def get_book(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(Book).offset(skip).limit(limit).all()
+def getTrack(db: Session, track: str, artist: str):
+    return db.query(Track).filter(and_(Track.track_name == track, Track.artist_name == artist)).first()
 
+def get_track_by_id(db: Session, track_id: int):
+    return db.query(Track).filter(Track.id == track_id).first()
 
-def get_book_by_id(db: Session, book_id: int):
-    return db.query(Book).filter(Book.id == book_id).first()
-
-
-def create_book(db: Session, book: BookSchema):
-    _book = Book(title=book.title, description=book.description)
-    db.add(_book)
+def create_track(db: Session, track: TrackSchema):
+    db_track = Track(track_uri=track.track_uri,
+                     track_name=track.track_name,
+                     artist_name=track.artist_name)
+    db.add(db_track)
     db.commit()
-    db.refresh(_book)
-    return _book
-
-
-def remove_book(db: Session, book_id: int):
-    _book = get_book_by_id(db=db, book_id=book_id)
-    db.delete(_book)
-    db.commit()
-
-
-def update_book(db: Session, book_id: int, title: str, description: str):
-    _book = get_book_by_id(db=db, book_id=book_id)
-
-    _book.title = title
-    _book.description = description
-
-    db.commit()
-    db.refresh(_book)
-    return _book
+    db.refresh(db_track)
+    return db_track

@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Path
 from fastapi import Depends
 from config import SessionLocal
 from sqlalchemy.orm import Session
-from schemas import BookSchema, Request, Response, RequestBook
+from schemas import Request, Response, RequestTrack
 
 import crud
 
@@ -16,38 +16,38 @@ def get_db():
     finally:
         db.close()
 
-
-@router.post("/create")
-async def create_book_service(request: RequestBook, db: Session = Depends(get_db)):
-    crud.create_book(db, book=request.parameter)
-    return Response(status="Ok",
-                    code="200",
-                    message="Book created successfully").dict(exclude_none=True)
-
-
+# HOME
 @router.get("/")
 async def home():
     return ("HOME")
 
-@router.get("/getAll")
-async def get_books(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    _books = crud.get_book(db, skip, limit)
-    return Response(status="Ok", code="200", message="Success fetch all data", result=_books)
-
+# GET TRACKS
 @router.get("/{id}")
 async def get_by_id(id: int, db: Session = Depends(get_db)):
-    _book = crud.get_book_by_id(db, id)
-    return Response(status="Ok", code="200", message="Success fetch all data", result=_book)
+    track = crud.get_track_by_id(db, id)
+    status = "OK"
+    code = "200"
+    msg = "Track found"
+    if (track == None):
+        msg = "Track not found"
+        status = "ERROR"
+        code = "404"
+
+    return Response(status=status, code=code, message=msg, result=track)
+
+@router.post("/getTracks")
+async def getTracks(request: RequestTrack, db: Session = Depends(get_db)):
+    trackIn = crud.getTrack(db, track=request.nameIn, artist=request.artistIn)
+    trackOut = crud.getTrack(db, track=request.nameOut, artist=request.artistOut)
+    return Response(status="Ok",
+                    code="200",
+                    message="Tracks Found Successfully",
+                    result={"trackIn": trackIn, "trackOut": trackOut}).dict(exclude_none=True)
 
 
-@router.patch("/update")
-async def update_book(request: RequestBook, db: Session = Depends(get_db)):
-    _book = crud.update_book(db, book_id=request.parameter.id,
-                             title=request.parameter.title, description=request.parameter.description)
-    return Response(status="Ok", code="200", message="Success update data", result=_book)
-
-
-@router.delete("/delete")
-async def delete_book(request: RequestBook,  db: Session = Depends(get_db)):
-    crud.remove_book(db, book_id=request.parameter.id)
-    return Response(status="Ok", code="200", message="Success delete data").dict(exclude_none=True)
+@router.post("/create")
+async def createTrack(request: RequestTrack, db: Session = Depends(get_db)):
+    crud.create_track(db, track=request.parameter)
+    return Response(status="Ok",
+                    code="200",
+                    message="Track created successfully").dict(exclude_none=True)

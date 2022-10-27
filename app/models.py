@@ -1,9 +1,9 @@
 from sqlalchemy import  Column, Integer, String
 from config import Base
-
-class Book(Base):
-    __tablename__ ="book"
+class Track(Base):
+    __tablename__ ="tracks"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String)
-    description = Column(String)
+    track_uri = Column(String)
+    track_name = Column(String)
+    artist_name = Column(String)

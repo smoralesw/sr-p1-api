@@ -4,23 +4,23 @@ from pydantic.generics import GenericModel
 
 T = TypeVar('T')
 
-
-class BookSchema(BaseModel):
+class TrackSchema(BaseModel):
     id: Optional[int] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
+    track_uri: Optional[str] = None
+    track_name: Optional[str] = None
+    artist_name: Optional[str] = None
 
     class Config:
         orm_mode = True
 
+class RequestTrack(BaseModel):
+    nameIn: str
+    artistIn: str
+    nameOut: str
+    artistOut: str
 
 class Request(GenericModel, Generic[T]):
     parameter: Optional[T] = Field(...)
-
-
-class RequestBook(BaseModel):
-    parameter: BookSchema = Field(...)
-
 
 class Response(GenericModel, Generic[T]):
     code: str
