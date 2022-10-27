@@ -21,7 +21,7 @@ def get_db():
 async def home():
     return ("HOME")
 
-# GET TRACKS
+# GET TRACKS BY ID
 @router.get("/{id}")
 async def get_by_id(id: int, db: Session = Depends(get_db)):
     track = crud.get_track_by_id(db, id)
@@ -35,6 +35,7 @@ async def get_by_id(id: int, db: Session = Depends(get_db)):
 
     return Response(status=status, code=code, message=msg, result=track)
 
+# GET TRACKS BY NAME & ARTIST
 @router.post("/getTracks")
 async def getTracks(request: RequestTrack, db: Session = Depends(get_db)):
     trackIn = crud.getTrack(db, track=request.nameIn, artist=request.artistIn)
@@ -54,7 +55,7 @@ async def getTracks(request: RequestTrack, db: Session = Depends(get_db)):
                     message=msg,
                     result={"trackIn": trackIn, "trackOut": trackOut}).dict(exclude_none=True)
 
-
+# CREATE TRACK
 @router.post("/create")
 async def createTrack(request: RequestTrack, db: Session = Depends(get_db)):
     crud.create_track(db, track=request.parameter)
