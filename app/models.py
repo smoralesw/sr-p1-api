@@ -7,3 +7,4 @@ class Track(Base):
     track_uri = Column(String)
     track_name = Column(String)
     artist_name = Column(String)
+    genres = Column(String)

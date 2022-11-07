@@ -9,6 +9,7 @@ class TrackSchema(BaseModel):
     track_uri: Optional[str] = None
     track_name: Optional[str] = None
     artist_name: Optional[str] = None
+    genres: Optional[str] = None
 
     class Config:
         orm_mode = True
@@ -21,6 +22,9 @@ class RequestTrack(BaseModel):
 
 class Request(GenericModel, Generic[T]):
     parameter: Optional[T] = Field(...)
+
+class RequestTrack_(BaseModel):
+    parameter: TrackSchema = Field(...)
 
 class Response(GenericModel, Generic[T]):
     code: str
