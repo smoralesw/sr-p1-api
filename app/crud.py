@@ -11,22 +11,25 @@ def get_names_from_path(db: Session, stable_paths: dict):
     for path_len, nodes in stable_paths.items():
         ms_path = list()
         for n in nodes[0]:
+            track_info = list()
             track = db.query(Track).filter(Track.id == n).first()
-            ms_path.append(track.track_name + "  ---  " + track.artist_name)
+            track_info.append(track.track_name + "  ---  " + track.artist_name)
+            track_info.append(track.track_uri[14:])
+            ms_path.append(track_info)
         paths[path_len] = ms_path
     return paths
 
 def getPath(id_1, id_2):
     G = nx.read_gpickle("hardrockslimmer.gpickle")
     most_stable, all_stable_paths = paths.most_stable_paths(G, id_1, id_2)
-
-
-
     return most_stable
 
 def getTrack(db: Session, track: str, artist: str):
     track = db.query(Track).filter(and_(Track.track_name.ilike('%' + track + '%'), Track.artist_name.ilike('%' + artist + '%'))).first()
     return track
+
+def add_track_spotify(db: Session, track_id: int):
+    return "Exito " + track_id
 
 def get_track_by_id(db: Session, track_id: int):
     return db.query(Track).filter(Track.id == track_id).first()

@@ -22,18 +22,10 @@ async def home():
     return ("HOME")
 
 # GET TRACKS BY ID
-@router.get("/{id}")
-async def get_by_id(id: int, db: Session = Depends(get_db)):
-    track = crud.get_track_by_id(db, id)
-    status = "OK"
-    code = "200"
-    msg = "Track found"
-    if (track == None):
-        msg = "Track not found"
-        status = "ERROR"
-        code = "404"
-
-    return Response(status=status, code=code, message=msg, result=track)
+@router.get("/addTrackSpotify/{id}")
+async def get_by_id(id: str, db: Session = Depends(get_db)):
+    # Send track id to spotify api and update favorites
+    return crud.add_track_spotify(db, id)
 
 # GET TRACKS BY NAME & ARTIST
 @router.post("/getPath")
