@@ -12,6 +12,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost:3001",
     "https://vercel.com/smoralesw/sr-p1-api",
+    "https://sr-p1-api.vercel.app",
 ]
 
 app.add_middleware(
