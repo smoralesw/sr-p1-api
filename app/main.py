@@ -11,6 +11,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://localhost:3001",
+    "https://vercel.com/smoralesw/sr-p1-api",
 ]
 
 app.add_middleware(
