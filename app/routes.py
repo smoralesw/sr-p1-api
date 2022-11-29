@@ -17,7 +17,7 @@ def get_db():
         db.close()
 
 # HOME
-@router.get("/")
+@router.get("/home")
 async def home():
     return ("HOME")
 
