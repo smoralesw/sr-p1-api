@@ -19,6 +19,7 @@ class RequestTrack(BaseModel):
     artistIn: str
     nameOut: str
     artistOut: str
+    genre: str
 
 class Request(GenericModel, Generic[T]):
     parameter: Optional[T] = Field(...)

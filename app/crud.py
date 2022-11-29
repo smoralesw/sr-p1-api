@@ -19,9 +19,11 @@ def get_names_from_path(db: Session, stable_paths: dict):
         paths[path_len] = ms_path
     return paths
 
-def getPath(id_1, id_2):
-    G = nx.read_gpickle("hardrockslimmer.gpickle")
+def getPath(id_1, id_2, genre):
+    G = nx.read_gpickle("graphs/" + genre + ".gpickle")
+    print("Bien acá")
     most_stable, all_stable_paths = paths.most_stable_paths(G, id_1, id_2)
+    print("Bien acá 2")
     return most_stable
 
 def getTrack(db: Session, track: str, artist: str):

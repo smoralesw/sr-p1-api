@@ -30,13 +30,17 @@ async def get_by_id(id: str, db: Session = Depends(get_db)):
 # GET TRACKS BY NAME & ARTIST
 @router.post("/getPath")
 async def getTracks(request: RequestTrack, db: Session = Depends(get_db)):
+    print(1)
     trackIn = crud.getTrack(db, track=request.nameIn, artist=request.artistIn)
+    print(2)
     trackOut = crud.getTrack(db, track=request.nameOut, artist=request.artistOut)
+    print(3)
+    genre = request.genre
 
-    most_stable = crud.getPath(trackIn.id, trackOut.id)
-
+    most_stable = crud.getPath(trackIn.id, trackOut.id, genre)
+    print(4)
     ms_tracks = crud.get_names_from_path(db, most_stable)
-    
+    print(5)
     status = "OK"
     code = "200"
     msg = "Paths Discovered Successfully"
@@ -53,6 +57,9 @@ async def getTracks(request: RequestTrack, db: Session = Depends(get_db)):
 
 @router.post("/getTracks")
 async def getTracks(request: RequestTrack, db: Session = Depends(get_db)):
+    print(request.artistIn)
+    print(request.trackIn)
+    
     trackIn = crud.getTrack(db, track=request.nameIn, artist=request.artistIn)
     trackOut = crud.getTrack(db, track=request.nameOut, artist=request.artistOut)
     
