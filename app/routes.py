@@ -37,6 +37,9 @@ async def getTracks(request: RequestTrack, db: Session = Depends(get_db)):
     print(3)
     genre = request.genre
 
+    if trackIn is None or trackOut is None:
+        raise HTTPException(status_code=404, detail="ERROR: Track not found")
+
     most_stable = crud.getPath(trackIn.id, trackOut.id, genre)
     print(4)
     ms_tracks = crud.get_names_from_path(db, most_stable)
